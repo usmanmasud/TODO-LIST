@@ -1,10 +1,8 @@
-const todoList =  [{
-    name: 'code',
-    dueDate: '2024-07-06',
-}, {
-    name: 'read',
-    dueDate: '2024-07-06'
-    
+const todoListKey = 'todoList';
+
+// Load tasks from local storage
+const storedTodoList = JSON.parse(localStorage.getItem(todoListKey));
+const todoList = storedTodoList ? storedTodoList : [{
 }];
 
 renderTodoList();
@@ -20,32 +18,40 @@ function renderTodoList() {
         <div>${dueDate}</div>
         <button onclick="
             todoList.splice(${i}, 1);
+            updateLocalStorage();
             renderTodoList();
         " class="delete-button">Delete</button>
         
         `;
         todoListHtml += html;
-
-       }
-           document.querySelector('.js-todo-list').innerHTML = todoListHtml
- 
+    }
+    document.querySelector('.js-todo-list').innerHTML = todoListHtml;
 }
-
 
 function addTodo() {
     const inputElement = document.querySelector('.js-todoName');
     const name = inputElement.value;
 
     const dueDateInput = document.querySelector('.js-due-date');
-
     const dueDate = dueDateInput.value;
 
     todoList.push({
         name: name,
         dueDate: dueDate
-});
+    });
 
-    inputElement.value = ""
+    inputElement.value = "";
+    dueDateInput.value = ""; // Clear due date input field
 
+    updateLocalStorage();
     renderTodoList();
+}
+
+function updateLocalStorage() {
+    localStorage.setItem(todoListKey, JSON.stringify(todoList));
+}
+
+// Initial call to update local storage if there is no data yet
+if (!storedTodoList) {
+    updateLocalStorage();
 }
