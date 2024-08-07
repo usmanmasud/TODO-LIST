@@ -2,8 +2,7 @@ const todoListKey = 'todoList';
 
 // Load tasks from local storage
 const storedTodoList = JSON.parse(localStorage.getItem(todoListKey));
-const todoList = storedTodoList ? storedTodoList : [{
-}];
+const todoList = storedTodoList ? storedTodoList : [];
 
 renderTodoList();
 
@@ -21,7 +20,6 @@ function renderTodoList() {
             updateLocalStorage();
             renderTodoList();
         " class="delete-button">Delete</button>
-        
         `;
         todoListHtml += html;
     }
@@ -49,6 +47,12 @@ function addTodo() {
 
 function updateLocalStorage() {
     localStorage.setItem(todoListKey, JSON.stringify(todoList));
+}
+
+function clearTodoList() {
+    todoList.length = 0; // Clear the array
+    localStorage.removeItem(todoListKey); // Clear local storage
+    renderTodoList(); // Update the UI
 }
 
 // Initial call to update local storage if there is no data yet
